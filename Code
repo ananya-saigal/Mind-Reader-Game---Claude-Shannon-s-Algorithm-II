@@ -1,0 +1,62 @@
+import random
+import numpy as np
+#Code for the algorothim of the game 
+inputs = np.zeros(shape=(2, 2, 2), dtype=int) 
+ 
+last_1 = 0
+last_2 = 0
+score=[0,0]
+def update_inputs(current):
+  global last_1, last_2
+  if inputs[last_2][last_1][0] == current:
+    inputs[last_2][last_1][1] = 1 
+    inputs[last_2][last_1][0] = current
+  else:
+    inputs[last_2][last_1][1] = 0 
+    inputs[last_2][last_1][0] = current
+ 
+  last_1 = current # current becomes last_1 
+  last_2 = last_1 # last_1 becomes last_2 
+ 
+def prediction():
+  if inputs[last_2][last_1][1] == 1: 
+    predict = inputs[last_2][last_1][0]    
+  else:
+    predict = random.randint(0, 1)  
+  return predict
+ 
+def update_scores(predicted, player_input):  
+  if predicted == player_input:
+    scores[0] = scores[0] + 1
+    print("Computer Score:", scores[0], "\nYour Score: ", scores[1]) 
+ 
+  else:
+    scores[1] = scores[0] + 1
+    print("Computer Score:", scores[0], "\nYour Score:", scores[1]) 
+ 
+def reset():
+  inputs=np.zeros(shape=(2, 2, 2), dtype=int)
+  score=np.zeros(shape=(2, 2), dtype=int)
+  return inputs,score 
+
+#gameplay() function is to run the Mind Reader game.  Mind Reader game runs till either the player or the computer has reached a score of  50 points.
+def gameplay():
+  reset()
+  valid_entries = [0, 1]
+  while True:
+    player_input = int(input("Enter either 1 or 0: "))
+    while player_input not in valid_entries:
+      print("Invalid Input!")
+      player_input = int(input("Enter either 1 or 0: "))  
+    predicted = prediction()
+    player_input = int(player_input)  
+    predicted = prediction()
+    update_inputs(player_input)
+    update_scores(predicted, player_input)
+    if scores[0] == 50:
+      print("Computer Wins!")
+      break
+ 
+    elif scores[1] == 50:
+      print("Congrats, You Won!")
+      break
